@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scam Checker is installed — one quick step</title>
+  <meta name="description" content="Scam Checker is installed. Pin it to your toolbar and get a clear safety verdict on any website, link, or email.">
+  <meta name="robots" content="noindex">
+  <style>
+    /* Welcome Page — самодостаточная, бренд-токены из design-system/MASTER.md */
+    :root {
+      --brand: #2563EB; --brand-hover: #1D4ED8; --on-brand: #FFF;
+      --background: #F6F8FB; --card: #FFF; --muted: #EDF1F7;
+      --foreground: #101828; --muted-foreground: #5D6B82; --border: #DFE5EE;
+      --safe: #15803D; --safe-bg: #F0FDF4; --safe-border: #BBF7D0;
+      --r: 14px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --brand: #3B82F6; --brand-hover: #60A5FA; --on-brand: #0B1220;
+        --background: #0B1220; --card: #131C2E; --muted: #1C2740;
+        --foreground: #F2F5FA; --muted-foreground: #8B99B0; --border: #24304A;
+        --safe: #34D399; --safe-bg: #0C271B; --safe-border: #14532D;
+      }
+    }
+    * { margin: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: var(--background); color: var(--foreground);
+      min-height: 100vh; padding: 48px 20px 64px;
+      display: flex; flex-direction: column; align-items: center;
+      font-size: 16px; line-height: 1.55;
+    }
+    .wrap { width: 100%; max-width: 680px; }
+
+    /* Указатель на тулбар (пазл справа сверху) */
+    .pointer {
+      position: fixed; top: 14px; right: 26px;
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 600; color: var(--brand);
+      animation: nudge 1.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .pointer svg { width: 30px; height: 30px; transform: rotate(-45deg); }
+    @keyframes nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @media (prefers-reduced-motion: reduce) { .pointer { animation: none; } }
+
+    .hero { text-align: center; margin-bottom: 40px; }
+    .hero img { width: 88px; height: 88px; margin-bottom: 18px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--safe-bg); color: var(--safe);
+      border: 1px solid var(--safe-border); border-radius: 999px;
+      padding: 6px 14px; font-size: 14px; font-weight: 600; margin-bottom: 16px;
+    }
+    h1 { font-size: 34px; line-height: 1.2; letter-spacing: -.02em; margin-bottom: 10px; text-wrap: balance; }
+    .sub { color: var(--muted-foreground); font-size: 18px; max-width: 480px; margin: 0 auto; }
+
+    .steps { display: flex; flex-direction: column; gap: 14px; margin: 36px 0; }
+    .step {
+      display: flex; gap: 18px; align-items: flex-start;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 22px 24px;
+    }
+    .num {
+      flex: none; width: 34px; height: 34px; border-radius: 50%;
+      background: var(--brand); color: var(--on-brand);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 16px;
+    }
+    .step h2 { font-size: 18px; margin-bottom: 4px; }
+    .step p { color: var(--muted-foreground); font-size: 15px; }
+    .step .kbd {
+      display: inline-block; padding: 1px 7px; border-radius: 6px;
+      background: var(--muted); border: 1px solid var(--border);
+      font-size: 13.5px; font-weight: 600; color: var(--foreground);
+    }
+    .step svg.inline { width: 18px; height: 18px; vertical-align: -3px; }
+
+    .cta {
+      display: block; text-align: center;
+      background: var(--brand); color: var(--on-brand);
+      border-radius: 12px; padding: 15px 22px;
+      font-size: 17px; font-weight: 600; text-decoration: none;
+      transition: background .15s ease-out;
+    }
+    .cta:hover { background: var(--brand-hover); }
+    .footer {
+      margin-top: 34px; text-align: center;
+      color: var(--muted-foreground); font-size: 13.5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Живой указатель на область пазла в тулбаре -->
+  <div class="pointer" aria-hidden="true">
+    <span>Find it up here</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <img src="icon128.png" alt="Scam Checker logo">
+      <div><span class="badge">✓ Installed successfully</span></div>
+      <h1>Scam Checker is ready. One quick step.</h1>
+      <p class="sub">Pin it to your toolbar so a safety verdict is always one click away.</p>
+    </header>
+
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <div>
+          <h2>Open the extensions menu</h2>
+          <p>Click the puzzle icon
+            <svg class="inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 7V5a2 2 0 0 0-4 0v2H7a2 2 0 0 0-2 2v3h2a2 2 0 0 1 0 4H5v3a2 2 0 0 0 2 2h3v-2a2 2 0 0 1 4 0v2h3a2 2 0 0 0 2-2v-3h2a2 2 0 0 0 0-4h-2V9a2 2 0 0 0-2-2h-3Z"/></svg>
+            in the top-right corner of your browser.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div>
+          <h2>Pin Scam Checker</h2>
+          <p>Find <span class="kbd">Scam Checker</span> in the list and click the pin
+            <svg class="inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1Z"/></svg>
+            next to it. The shield will stay on your toolbar.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div>
+          <h2>Check any page in one click</h2>
+          <p>Click the shield to scan the site you are on — or paste any link or email text to get a clear verdict: safe, suspicious, or dangerous.</p>
+        </div>
+      </div>
+    </div>
+
+    <a class="cta" href="https://www.google.com" target="_blank" rel="noopener">Open a website and try it now</a>
+
+    <p class="footer">Scam Checker never collects your browsing history.<br>
+      Analysis runs only when you ask for a check.</p>
+  </div>
+  <!-- analytics placeholder: страница открывается один раз после установки -->
+</body>
+</html>
