@@ -78,8 +78,8 @@
     }
     .step-chip i {
       width: 26px; height: 26px; border-radius: 50%; font-style: normal;
-      background: var(--brand); color: var(--on-brand);
-      display: inline-flex; align-items: center; justify-content: center; font-size: 14px;
+      background: var(--muted);
+      display: inline-flex; align-items: center; justify-content: center; font-size: 13px;
     }
 
     /* Chrome-окно (светлое, аутентичное) */
@@ -174,23 +174,35 @@
     .vrow span { color: #8B99B0; }
     .vrow code { font-family: ui-monospace, monospace; color: #F2F5FA; }
 
-    /* Маркеры и стрелки */
-    .marker {
-      position: absolute; z-index: 6;
-      width: 48px; height: 48px; border-radius: 50%;
-      background: #FFF; border: 3px solid var(--mark);
-      box-shadow: 0 0 0 3px #FFF, 0 0 0 6px var(--mark), 0 6px 18px rgba(0,0,0,.2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 23px; font-weight: 800; color: var(--mark);
-      font-family: Georgia, 'Times New Roman', serif;
+    /* Подсветка целей: ореол + номер-бейдж, приклеенные к самому элементу */
+    .hl {
+      position: relative; border-radius: 9px;
+      outline: 2.5px solid #2563EB;
+      outline-offset: 3px;
+      animation: halo 1.8s ease-in-out infinite;
     }
-    .arrow { position: absolute; z-index: 5; overflow: visible; }
-    .arrow path { fill: none; stroke: var(--mark); stroke-width: 4.5; stroke-linecap: round; }
-    .arrow .head { fill: var(--mark); stroke: none; }
-    .target-ring {
-      position: absolute; z-index: 5; border-radius: 50%;
-      border: 3px solid var(--mark);
-      box-shadow: 0 0 0 2px #FFF, 0 0 0 5px var(--mark);
+    @keyframes halo {
+      0%, 100% { box-shadow: 0 0 0 7px rgba(37, 99, 235, .22); }
+      50%      { box-shadow: 0 0 0 13px rgba(37, 99, 235, .07); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hl { animation: none; box-shadow: 0 0 0 7px rgba(37, 99, 235, .18); }
+    }
+    .hl-badge {
+      position: absolute; top: -15px; left: -15px; z-index: 7;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: #2563EB; color: #FFF;
+      border: 2.5px solid #FFF;
+      display: flex; align-items: center; justify-content: center;
+      font: 800 14px/1 system-ui, sans-serif; font-style: normal;
+      box-shadow: 0 3px 10px rgba(2, 8, 23, .35);
+    }
+    .hl.round, .hl.round + .hl-badge { border-radius: 50%; }
+    /* курсор-клик у цели на экране 2 */
+    .click-cursor {
+      position: absolute; bottom: -17px; right: -15px; z-index: 7;
+      width: 22px; height: 22px; color: #101828;
+      filter: drop-shadow(0 1px 2px rgba(255,255,255,.9));
     }
 
     .cta {
@@ -229,7 +241,7 @@
 
       <!-- Экран 1: найти и закрепить -->
       <section class="panel" aria-label="How to pin Scam Checker">
-        <div class="step-chip"><i>1</i> Pin it — two clicks</div>
+        <div class="step-chip"><i>📌</i> Pin it — clicks 1 and 2</div>
         <div class="browser" aria-hidden="true">
           <div class="b-tabs">
             <div class="b-tab"><img src="icon128.png" alt=""> Scam Checker <span class="x">✕</span></div>
@@ -242,7 +254,10 @@
             </div>
             <div class="b-url">Search or type a URL</div>
             <div class="b-ext">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 7V5a2 2 0 0 0-4 0v2H7a2 2 0 0 0-2 2v3h2a2 2 0 0 1 0 4H5v3a2 2 0 0 0 2 2h3v-2a2 2 0 0 1 4 0v2h3a2 2 0 0 0 2-2v-3h2a2 2 0 0 0 0-4h-2V9a2 2 0 0 0-2-2h-3Z"/></svg>
+              <span class="hl" style="display:flex;padding:3px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M14 7V5a2 2 0 0 0-4 0v2H7a2 2 0 0 0-2 2v3h2a2 2 0 0 1 0 4H5v3a2 2 0 0 0 2 2h3v-2a2 2 0 0 1 4 0v2h3a2 2 0 0 0 2-2v-3h2a2 2 0 0 0 0-4h-2V9a2 2 0 0 0-2-2h-3Z"/></svg>
+                <i class="hl-badge">1</i>
+              </span>
               <span class="avatar"></span>
             </div>
           </div>
@@ -260,8 +275,9 @@
               <div class="drow">
                 <img src="icon128.png" alt="">
                 Scam Checker
-                <span class="pin">
+                <span class="pin hl" style="border-radius:50%;">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1Z"/></svg>
+                  <i class="hl-badge">2</i>
                 </span>
               </div>
               <div class="drow manage">
@@ -271,24 +287,11 @@
             </div>
           </div>
         </div>
-        <!-- прицелы экрана 1 -->
-        <div class="marker" style="top: 30px; right: 150px;">1</div>
-        <svg class="arrow" style="top: 60px; right: 76px; width: 64px; height: 34px;" viewBox="0 0 64 34">
-          <path d="M4 6 C 24 2, 44 8, 54 20"/>
-          <polygon class="head" points="60,28 46,24 54,14"/>
-        </svg>
-        <div class="target-ring" style="top: 89px; right: 34px; width: 40px; height: 40px;"></div>
-        <div class="marker" style="top: 300px; right: -18px;">2</div>
-        <svg class="arrow" style="top: 290px; right: 30px; width: 50px; height: 34px;" viewBox="0 0 56 36">
-          <path d="M50 32 C 38 34, 24 30, 14 18"/>
-          <polygon class="head" points="8,8 24,11 15,23"/>
-        </svg>
-        <div class="target-ring" style="top: 242px; right: 26px; width: 44px; height: 44px;"></div>
       </section>
 
       <!-- Экран 2: запустить и получить вердикт -->
       <section class="panel" aria-label="How to run a check">
-        <div class="step-chip"><i>2</i> Click the shield — get a verdict</div>
+        <div class="step-chip"><i>🛡</i> Click 3 — get the verdict</div>
         <div class="browser" aria-hidden="true">
           <div class="b-tabs">
             <div class="b-tab"><img src="icon128.png" alt=""> Scam Checker <span class="x">✕</span></div>
@@ -302,7 +305,11 @@
             <div class="b-url">suspicious-shop.top/checkout</div>
             <div class="b-ext">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 7V5a2 2 0 0 0-4 0v2H7a2 2 0 0 0-2 2v3h2a2 2 0 0 1 0 4H5v3a2 2 0 0 0 2 2h3v-2a2 2 0 0 1 4 0v2h3a2 2 0 0 0 2-2v-3h2a2 2 0 0 0 0-4h-2V9a2 2 0 0 0-2-2h-3Z"/></svg>
-              <span class="pinned"><img src="icon128.png" alt=""></span>
+              <span class="pinned hl">
+                <img src="icon128.png" alt="">
+                <i class="hl-badge">3</i>
+                <svg class="click-cursor" viewBox="0 0 24 24" fill="currentColor"><path d="M4 2l16 7.5-6.8 1.9L17 19l-3 1.4-3.8-7.6L5.5 17z"/></svg>
+              </span>
               <span class="avatar"></span>
             </div>
           </div>
@@ -328,13 +335,6 @@
             </div>
           </div>
         </div>
-        <!-- прицел экрана 2: клик по закреплённой иконке -->
-        <div class="marker" style="top: 24px; right: -14px;">3</div>
-        <svg class="arrow" style="top: 50px; right: 22px; width: 44px; height: 38px;" viewBox="0 0 44 40">
-          <path d="M40 4 C 34 20, 26 28, 14 32"/>
-          <polygon class="head" points="4,34 18,26 20,38"/>
-        </svg>
-        <div class="target-ring" style="top: 86px; right: 36px; width: 40px; height: 40px;"></div>
       </section>
     </div>
 
