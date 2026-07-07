@@ -70,52 +70,92 @@
     h1 em { font-style: normal; color: var(--brand); }
     .sub { color: var(--muted-foreground); font-size: 19px; max-width: 430px; }
 
-    /* Вердикт-мокап: суть продукта в одной карточке */
+    /* Вердикт-мокап: скриншотоподобное окно Chrome с попапом расширения */
     .mock { position: relative; }
-    .mock-card {
-      background: var(--ink-card);
-      border: 1px solid var(--ink-border);
-      border-radius: 18px; padding: 22px;
+    .browser {
+      background: var(--ink-card); border: 1px solid var(--ink-border);
+      border-radius: 14px; overflow: hidden;
       box-shadow: 0 24px 70px rgba(2, 8, 23, .45);
-      color: #F2F5FA;
-      max-width: 430px; margin: 0 auto;
+      color: #F2F5FA; max-width: 520px; margin: 0 auto;
     }
-    .mock-url {
+    .b-tabs {
+      display: flex; align-items: flex-end; gap: 6px;
+      background: #0B1220; padding: 8px 12px 0;
+    }
+    .b-dots { display: flex; gap: 6px; margin: 0 6px 10px 0; }
+    .b-dots i { width: 10px; height: 10px; border-radius: 50%; background: #24304A; }
+    .b-tab {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--ink-card); border: 1px solid var(--ink-border); border-bottom: none;
+      border-radius: 9px 9px 0 0; padding: 7px 14px;
+      font-size: 12.5px; color: #B9C4D6; max-width: 240px;
+    }
+    .b-tab em { font-style: normal; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .b-tab .fav { width: 12px; height: 12px; border-radius: 3px; background: #7F1D1D; flex: none; }
+    .b-bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border-bottom: 1px solid var(--ink-border);
+    }
+    .b-nav { display: flex; gap: 8px; color: #5D6B82; }
+    .b-nav svg { width: 16px; height: 16px; }
+    .b-url {
+      flex: 1; display: flex; align-items: center; gap: 8px;
       font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
-      font-size: 13.5px; color: #B9C4D6;
+      font-size: 12px; color: #B9C4D6;
       background: #0B1220; border: 1px solid var(--ink-border);
-      border-radius: 9px; padding: 10px 13px;
-      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-      margin-bottom: 16px;
+      border-radius: 999px; padding: 6px 12px;
+      overflow: hidden; white-space: nowrap;
+    }
+    .b-url .ns { color: #F87171; font-family: inherit; font-size: 11px; font-weight: 600; flex: none; }
+    .b-ext { display: flex; align-items: center; gap: 8px; }
+    .b-ext svg { width: 16px; height: 16px; color: #5D6B82; }
+    .b-ext .pinned {
+      width: 26px; height: 26px; border-radius: 7px;
+      background: #1C2740; display: flex; align-items: center; justify-content: center;
+      outline: 2px solid var(--brand);
+    }
+    .b-ext .pinned img { width: 17px; height: 17px; }
+    .b-page { position: relative; height: 320px; background: #0F1828; overflow: hidden; }
+    /* скелет фишинг-страницы позади попапа */
+    .skel { position: absolute; inset: 0; padding: 22px; opacity: .5; }
+    .skel i {
+      display: block; border-radius: 6px; background: #1C2740; margin-bottom: 12px;
+    }
+    /* Попап расширения, выпадающий из-под закреплённой иконки */
+    .mock-card {
+      position: absolute; top: 10px; right: 10px; width: 316px;
+      background: var(--ink-card); border: 1px solid var(--ink-border);
+      border-radius: 14px; padding: 16px;
+      box-shadow: 0 18px 50px rgba(2, 8, 23, .6);
     }
     .mock-verdict {
-      display: flex; align-items: center; gap: 16px;
+      display: flex; align-items: center; gap: 13px;
       background: #2A1414; border: 1px solid #7F1D1D;
-      border-radius: 13px; padding: 14px 16px; margin-bottom: 14px;
+      border-radius: 11px; padding: 12px 13px; margin-bottom: 11px;
     }
     .ring {
       --p: 87;
-      width: 64px; height: 64px; border-radius: 50%; flex: none;
+      width: 56px; height: 56px; border-radius: 50%; flex: none;
       background:
         radial-gradient(closest-side, #2A1414 74%, transparent 75% 100%),
         conic-gradient(#F87171 calc(var(--p) * 1%), #3a1d1d 0);
       display: flex; align-items: center; justify-content: center;
-      font-family: ui-monospace, monospace; font-weight: 700; font-size: 19px; color: #FECACA;
+      font-family: ui-monospace, monospace; font-weight: 700; font-size: 17px; color: #FECACA;
     }
-    .mock-verdict b { display: block; font-size: 20px; color: #F87171; letter-spacing: -.01em; }
-    .mock-verdict span { font-size: 13px; color: #E7B9B9; }
+    .mock-verdict b { display: block; font-size: 18px; color: #F87171; letter-spacing: -.01em; }
+    .mock-verdict span { font-size: 12px; color: #E7B9B9; }
     .mock-rows { display: flex; flex-direction: column; gap: 7px; }
     .mock-row {
       display: flex; justify-content: space-between; gap: 10px;
       background: #0F1828; border: 1px solid var(--ink-border);
       border-left: 3px solid #F87171;
-      border-radius: 8px; padding: 8px 12px; font-size: 13px;
+      border-radius: 8px; padding: 7px 11px; font-size: 12.5px;
     }
     .mock-row span { color: #8B99B0; }
     .mock-row code { font-family: ui-monospace, monospace; color: #F2F5FA; }
     /* Плавающий SAFE-чип для контраста */
     .safe-chip {
-      position: absolute; top: -18px; right: 2px;
+      position: absolute; bottom: -16px; left: 6px; z-index: 2;
       display: flex; align-items: center; gap: 8px;
       background: var(--safe-bg); color: var(--safe);
       border: 1px solid var(--safe-border);
@@ -179,11 +219,34 @@
         <p class="sub">Any website, link, or email gets a clear verdict with a 0–100 risk score and the exact reasons why. No guessing.</p>
       </div>
 
-      <!-- Вердикт-мокап -->
+      <!-- Вердикт-мокап: окно Chrome с попапом расширения -->
       <div class="mock" aria-hidden="true">
         <div class="safe-chip">✓ Safe <code>wikipedia.org</code></div>
-        <div class="mock-card">
-          <div class="mock-url">http://paypal-verify.login-secure.top/account</div>
+        <div class="browser">
+          <div class="b-tabs">
+            <div class="b-dots"><i></i><i></i><i></i></div>
+            <div class="b-tab"><span class="fav"></span><em>Verify your account — urgent</em></div>
+          </div>
+          <div class="b-bar">
+            <div class="b-nav">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+            </div>
+            <div class="b-url"><span class="ns">⚠ Not secure</span> paypal-verify.login-secure.top/account</div>
+            <div class="b-ext">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 7V5a2 2 0 0 0-4 0v2H7a2 2 0 0 0-2 2v3h2a2 2 0 0 1 0 4H5v3a2 2 0 0 0 2 2h3v-2a2 2 0 0 1 4 0v2h3a2 2 0 0 0 2-2v-3h2a2 2 0 0 0 0-4h-2V9a2 2 0 0 0-2-2h-3Z"/></svg>
+              <span class="pinned"><img src="icon128.png" alt=""></span>
+            </div>
+          </div>
+          <div class="b-page">
+            <div class="skel">
+              <i style="width:52%;height:26px"></i>
+              <i style="width:78%;height:12px"></i>
+              <i style="width:70%;height:12px"></i>
+              <i style="width:40%;height:12px;margin-bottom:22px"></i>
+              <i style="width:150px;height:38px;background:#7F1D1D"></i>
+            </div>
+            <div class="mock-card">
           <div class="mock-verdict">
             <div class="ring">87</div>
             <div>
@@ -195,6 +258,8 @@
             <div class="mock-row"><span>Domain age</span><code>4 days</code></div>
             <div class="mock-row"><span>Impersonation</span><code>"paypal" in the domain</code></div>
             <div class="mock-row"><span>Connection</span><code>not secure</code></div>
+          </div>
+            </div>
           </div>
         </div>
       </div>
