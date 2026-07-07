@@ -10,7 +10,7 @@
   <meta property="og:type" content="website">
   <link rel="icon" type="image/png" href="icon128.png">
   <style>
-    /* Welcome Page v4 — описание сверху + большой Chrome-мокап с цифрами и стрелками */
+    /* Welcome v5 — два экрана: «закрепи» и «запусти», табы с логотипом */
     :root {
       --brand: #2563EB; --brand-hover: #1D4ED8; --on-brand: #FFF;
       --background: #F6F8FB; --card: #FFF; --muted: #EDF1F7;
@@ -34,9 +34,8 @@
       display: flex; flex-direction: column; align-items: center;
       font-size: 16px; line-height: 1.55;
     }
-    .wrap { width: 100%; max-width: 1000px; }
+    .wrap { width: 100%; max-width: 1060px; }
 
-    /* Указатель на реальный тулбар */
     .pointer {
       position: fixed; top: 14px; right: 26px; z-index: 10;
       display: flex; align-items: center; gap: 10px;
@@ -45,10 +44,10 @@
     }
     .pointer svg { width: 30px; height: 30px; transform: rotate(45deg); }
     @keyframes nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    @media (prefers-reduced-motion: reduce) { .pointer { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .pointer { animation: none !important; } }
 
-    /* ------------------------------------------------ описание сверху --- */
-    .hero { text-align: center; margin-bottom: 34px; }
+    /* --------------------------------------------------------- шапка --- */
+    .hero { text-align: center; margin-bottom: 40px; }
     .brand-row { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 20px; }
     .brand-row img { width: 44px; height: 44px; }
     .brand-row b { font-size: 19px; letter-spacing: -.01em; }
@@ -62,104 +61,136 @@
     h1 em { font-style: normal; color: var(--brand); }
     .sub { color: var(--muted-foreground); font-size: 18px; max-width: 560px; margin: 0 auto; }
 
-    /* ------------------------------------- большой Chrome-мокап (светлый) --- */
-    .mock { position: relative; margin: 0 auto 8px; max-width: 1000px; }
-    .browser {
-      background: #FFF; border: 1px solid #D5DAE2; border-radius: 14px;
-      overflow: hidden; box-shadow: 0 26px 80px rgba(2, 8, 23, .22);
-      color: #202124;
+    /* -------------------------------------------------- два экрана --- */
+    .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 36px; }
+    @media (max-width: 900px) { .duo { grid-template-columns: 1fr; } }
+    .panel { position: relative; }
+    .panel:nth-child(1) { transform: rotate(-1.1deg); }
+    .panel:nth-child(2) { transform: rotate(1.1deg); }
+    @media (prefers-reduced-motion: reduce) { .panel { transform: none; } }
+
+    .step-chip {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 999px; padding: 7px 16px 7px 8px;
+      font-weight: 700; font-size: 14px; letter-spacing: .02em;
+      margin-bottom: 14px; box-shadow: 0 2px 8px rgba(2,8,23,.08);
     }
-    .b-tabs { display: flex; align-items: flex-end; background: #DEE1E6; padding: 8px 14px 0; gap: 8px; }
+    .step-chip i {
+      width: 26px; height: 26px; border-radius: 50%; font-style: normal;
+      background: var(--brand); color: var(--on-brand);
+      display: inline-flex; align-items: center; justify-content: center; font-size: 14px;
+    }
+
+    /* Chrome-окно (светлое, аутентичное) */
+    .browser {
+      background: #FFF; border: 1px solid #D5DAE2; border-radius: 13px;
+      overflow: hidden; box-shadow: 0 22px 60px rgba(2, 8, 23, .25);
+      color: #202124; font-size: 13px;
+    }
+    .b-tabs { display: flex; align-items: flex-end; background: #DEE1E6; padding: 7px 12px 0; gap: 8px; }
     .b-tab {
       display: flex; align-items: center; gap: 8px;
-      background: #FFF; border-radius: 10px 10px 0 0;
-      padding: 8px 16px; font-size: 13px; color: #3C4043; min-width: 200px;
+      background: #FFF; border-radius: 9px 9px 0 0;
+      padding: 7px 14px; color: #3C4043; min-width: 180px; font-weight: 500;
     }
-    .b-tab .fav { width: 13px; height: 13px; border-radius: 4px; background: var(--brand); flex: none; }
-    .b-tab .x { margin-left: auto; color: #80868B; font-size: 14px; }
-    .b-plus { color: #5F6368; font-size: 18px; padding: 6px 4px; }
-    .b-bar { display: flex; align-items: center; gap: 12px; background: #FFF; padding: 9px 14px; }
-    .b-nav { display: flex; gap: 12px; color: #5F6368; }
-    .b-nav svg { width: 18px; height: 18px; }
+    .b-tab img { width: 15px; height: 15px; flex: none; }
+    .b-tab .x { margin-left: auto; color: #80868B; }
+    .b-plus { color: #5F6368; font-size: 17px; padding: 5px 2px; }
+    .b-bar { display: flex; align-items: center; gap: 10px; background: #FFF; padding: 8px 12px; border-bottom: 1px solid #EEF0F3; }
+    .b-nav { display: flex; gap: 10px; color: #5F6368; }
+    .b-nav svg { width: 17px; height: 17px; }
     .b-url {
-      flex: 1; display: flex; align-items: center; gap: 8px;
-      background: #F1F3F4; border-radius: 999px; padding: 8px 16px;
-      font-size: 13px; color: #5F6368;
+      flex: 1; display: flex; align-items: center; gap: 7px;
+      background: #F1F3F4; border-radius: 999px; padding: 7px 14px;
+      font-size: 12px; color: #5F6368; overflow: hidden; white-space: nowrap;
     }
-    .b-ext { display: flex; align-items: center; gap: 14px; color: #5F6368; }
-    .b-ext svg { width: 19px; height: 19px; }
-    .b-ext .avatar { width: 22px; height: 22px; border-radius: 50%; background: #AECBFA; }
-
-    /* Страница за окном: нейтральный нью-таб */
-    .b-page { position: relative; height: 430px; background: #FFF; }
-    .b-page .center { position: absolute; left: 50%; top: 130px; transform: translateX(-50%); text-align: center; width: 560px; max-width: 80%; }
-    .b-page .center img { width: 64px; height: 64px; margin-bottom: 22px; opacity: .95; }
-    .b-search {
-      display: flex; align-items: center; gap: 10px;
-      background: #FFF; border: 1px solid #DFE1E5; border-radius: 999px;
-      box-shadow: 0 1px 6px rgba(32, 33, 36, .18);
-      padding: 12px 20px; color: #9AA0A6; font-size: 14px; text-align: left;
+    .b-ext { display: flex; align-items: center; gap: 11px; color: #5F6368; }
+    .b-ext svg { width: 18px; height: 18px; }
+    .b-ext .avatar { width: 20px; height: 20px; border-radius: 50%; background: #AECBFA; flex: none; }
+    .b-ext .pinned {
+      width: 26px; height: 26px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      background: #E8F0FE; flex: none;
     }
-    .b-search svg { width: 17px; height: 17px; flex: none; }
+    .b-ext .pinned img { width: 17px; height: 17px; }
+    .b-page { position: relative; height: 330px; background: #FAFBFC; overflow: hidden; }
 
-    /* Дропдаун Extensions */
+    /* скелет страницы */
+    .skel { position: absolute; inset: 0; padding: 24px; opacity: .8; }
+    .skel i { display: block; border-radius: 6px; background: #E8ECF2; margin-bottom: 12px; }
+
+    /* Дропдаун Extensions (экран 1) */
     .dropdown {
-      position: absolute; top: 6px; right: 118px; width: 320px;
+      position: absolute; top: 8px; right: 12px; width: 292px;
       background: #FFF; border-radius: 12px;
       box-shadow: 0 6px 28px rgba(32, 33, 36, .28);
-      padding: 16px; z-index: 3; text-align: left;
+      padding: 15px; z-index: 3;
     }
-    .dropdown h3 { font-size: 15px; color: #202124; margin-bottom: 4px; font-weight: 600; }
-    .dropdown .x { position: absolute; top: 14px; right: 16px; color: #5F6368; }
-    .dropdown small { display: block; color: #5F6368; font-size: 12px; line-height: 1.45; margin-bottom: 12px; }
-    .drow { display: flex; align-items: center; gap: 12px; padding: 9px 2px; font-size: 14px; color: #202124; }
-    .drow img { width: 22px; height: 22px; }
+    .dropdown h3 { font-size: 14.5px; color: #202124; margin-bottom: 3px; font-weight: 600; }
+    .dropdown .x { position: absolute; top: 13px; right: 15px; color: #5F6368; }
+    .dropdown small { display: block; color: #5F6368; font-size: 11.5px; line-height: 1.45; margin-bottom: 10px; }
+    .drow { display: flex; align-items: center; gap: 11px; padding: 8px 2px; font-size: 13.5px; color: #202124; }
+    .drow img { width: 21px; height: 21px; }
     .drow .pin {
-      margin-left: auto; width: 34px; height: 34px; border-radius: 50%;
+      margin-left: auto; width: 32px; height: 32px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       color: #1A73E8; background: #E8F0FE;
     }
-    .drow .pin svg { width: 18px; height: 18px; }
-    .drow.manage { border-top: 1px solid #E8EAED; margin-top: 8px; padding-top: 12px; color: #3C4043; }
-    .drow.manage svg { width: 20px; height: 20px; color: #5F6368; }
+    .drow .pin svg { width: 17px; height: 17px; }
+    .drow.manage { border-top: 1px solid #E8EAED; margin-top: 7px; padding-top: 11px; color: #3C4043; }
+    .drow.manage svg { width: 18px; height: 18px; color: #5F6368; }
 
-    /* Красные маркеры-цифры и стрелки (как в референсе) */
-    .marker {
-      position: absolute; z-index: 5;
-      width: 54px; height: 54px; border-radius: 50%;
-      background: #FFF; border: 3px solid var(--mark);
-      box-shadow: 0 0 0 3px #FFF, 0 0 0 6px var(--mark), 0 6px 18px rgba(0,0,0,.18);
+    /* Попап расширения (экран 2) — тёмный, как в продукте */
+    .popup {
+      position: absolute; top: 8px; right: 10px; width: 268px;
+      background: #131C2E; border: 1px solid #24304A; border-radius: 13px;
+      padding: 14px; z-index: 3; color: #F2F5FA;
+      box-shadow: 0 16px 44px rgba(2, 8, 23, .5);
+    }
+    .p-head { display: flex; align-items: center; gap: 8px; margin-bottom: 11px; }
+    .p-head img { width: 20px; height: 20px; }
+    .p-head b { font-size: 13px; }
+    .verdict {
+      display: flex; align-items: center; gap: 12px;
+      background: #2A1414; border: 1px solid #7F1D1D;
+      border-radius: 11px; padding: 11px 12px; margin-bottom: 10px;
+    }
+    .ring {
+      width: 50px; height: 50px; border-radius: 50%; flex: none;
+      background:
+        radial-gradient(closest-side, #2A1414 73%, transparent 74% 100%),
+        conic-gradient(#F87171 87%, #3A1D1D 0);
       display: flex; align-items: center; justify-content: center;
-      font-size: 26px; font-weight: 800; color: var(--mark);
+      font-family: ui-monospace, monospace; font-weight: 700; font-size: 15px; color: #FECACA;
+    }
+    .verdict b { display: block; font-size: 16px; color: #F87171; }
+    .verdict span { font-size: 11px; color: #E7B9B9; line-height: 1.4; }
+    .vrow {
+      display: flex; justify-content: space-between; gap: 8px;
+      background: #0F1828; border: 1px solid #24304A; border-left: 3px solid #F87171;
+      border-radius: 7px; padding: 6px 10px; font-size: 11.5px; margin-bottom: 6px;
+    }
+    .vrow span { color: #8B99B0; }
+    .vrow code { font-family: ui-monospace, monospace; color: #F2F5FA; }
+
+    /* Маркеры и стрелки */
+    .marker {
+      position: absolute; z-index: 6;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: #FFF; border: 3px solid var(--mark);
+      box-shadow: 0 0 0 3px #FFF, 0 0 0 6px var(--mark), 0 6px 18px rgba(0,0,0,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 23px; font-weight: 800; color: var(--mark);
       font-family: Georgia, 'Times New Roman', serif;
     }
-    .arrow { position: absolute; z-index: 4; overflow: visible; }
-    .arrow path { fill: none; stroke: var(--mark); stroke-width: 5; stroke-linecap: round; }
+    .arrow { position: absolute; z-index: 5; overflow: visible; }
+    .arrow path { fill: none; stroke: var(--mark); stroke-width: 4.5; stroke-linecap: round; }
     .arrow .head { fill: var(--mark); stroke: none; }
-
-    /* Ринг вокруг цели */
     .target-ring {
-      position: absolute; z-index: 4; border-radius: 50%;
+      position: absolute; z-index: 5; border-radius: 50%;
       border: 3px solid var(--mark);
-      box-shadow: 0 0 0 3px #FFF, 0 0 0 6px var(--mark);
-      background: transparent;
-    }
-
-    /* Подпись-шаг 3 (как выделение в референсе) */
-    .caption {
-      text-align: center; margin: 26px 0 34px; font-size: 19px; line-height: 1.5;
-    }
-    .caption mark {
-      background: var(--muted); color: var(--foreground);
-      padding: 4px 10px; border-radius: 6px;
-      box-decoration-break: clone; -webkit-box-decoration-break: clone;
-    }
-    .caption .n {
-      display: inline-flex; width: 26px; height: 26px; border-radius: 50%;
-      border: 2.5px solid var(--mark); color: var(--mark);
-      align-items: center; justify-content: center;
-      font-weight: 800; font-size: 15px; vertical-align: -6px;
-      background: #FFF; margin: 0 2px;
+      box-shadow: 0 0 0 2px #FFF, 0 0 0 5px var(--mark);
     }
 
     .cta {
@@ -171,13 +202,7 @@
     }
     .cta:hover { background: var(--brand-hover); }
     .footer { margin-top: 28px; text-align: center; color: var(--muted-foreground); font-size: 13.5px; }
-
-    @media (max-width: 720px) {
-      h1 { font-size: 30px; }
-      .b-page { height: 500px; }
-      .dropdown { right: 12px; }
-      .marker { width: 44px; height: 44px; font-size: 21px; }
-    }
+    @media (max-width: 720px) { h1 { font-size: 30px; } }
   </style>
 </head>
 <body>
@@ -196,76 +221,122 @@
         <span class="badge">✓ Installed</span>
       </div>
       <h1>Know it's a scam — <em>before</em> you click.</h1>
-      <p class="sub">Any website, link, or email gets a clear verdict with a 0–100 risk score and the exact reasons why. Pin it now — it takes two clicks:</p>
+      <p class="sub">Two quick steps and every website, link, or email is one click away from a clear verdict.</p>
     </header>
 
-    <!-- Большой Chrome-мокап с инструкцией -->
-    <div class="mock" aria-hidden="true">
-      <div class="browser">
-        <div class="b-tabs">
-          <div class="b-tab"><span class="fav"></span> New Tab <span class="x">✕</span></div>
-          <div class="b-plus">+</div>
-        </div>
-        <div class="b-bar">
-          <div class="b-nav">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/></svg>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 5 7 7-7 7"/></svg>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
-          </div>
-          <div class="b-url">Search or type a URL</div>
-          <div class="b-ext">
-            <svg id="puzzle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 7V5a2 2 0 0 0-4 0v2H7a2 2 0 0 0-2 2v3h2a2 2 0 0 1 0 4H5v3a2 2 0 0 0 2 2h3v-2a2 2 0 0 1 4 0v2h3a2 2 0 0 0 2-2v-3h2a2 2 0 0 0 0-4h-2V9a2 2 0 0 0-2-2h-3Z"/></svg>
-            <span class="avatar"></span>
-            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
-          </div>
-        </div>
-        <div class="b-page">
-          <!-- нейтральный new tab -->
-          <div class="center">
-            <img src="icon128.png" alt="">
-            <div class="b-search">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-              Search or paste a link to check…
-            </div>
-          </div>
-          <!-- дропдаун Extensions -->
-          <div class="dropdown">
-            <span class="x">✕</span>
-            <h3>Extensions</h3>
-            <small>These extensions don't need to see and change information on this site.</small>
-            <div class="drow">
-              <img src="icon128.png" alt="">
-              Scam Checker
-              <span class="pin">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1Z"/></svg>
-              </span>
-            </div>
-            <div class="drow manage">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
-              Manage Extensions
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- Два экрана -->
+    <div class="duo">
 
-      <!-- Маркеры и стрелки поверх мокапа (позиции в % от .mock) -->
-      <div class="marker" style="top: 8px; left: 68%;">1</div>
-      <svg class="arrow" style="top: 32px; left: 71%; width: 100px; height: 40px;" viewBox="0 0 90 40">
-        <path d="M4 12 C 34 2, 62 8, 80 22"/>
-        <polygon class="head" points="86,28 70,24 78,14"/>
-      </svg>
-      <div class="target-ring" style="top: 42px; right: 71px; width: 42px; height: 42px;"></div>
+      <!-- Экран 1: найти и закрепить -->
+      <section class="panel" aria-label="How to pin Scam Checker">
+        <div class="step-chip"><i>1</i> Pin it — two clicks</div>
+        <div class="browser" aria-hidden="true">
+          <div class="b-tabs">
+            <div class="b-tab"><img src="icon128.png" alt=""> Scam Checker <span class="x">✕</span></div>
+            <div class="b-plus">+</div>
+          </div>
+          <div class="b-bar">
+            <div class="b-nav">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+            </div>
+            <div class="b-url">Search or type a URL</div>
+            <div class="b-ext">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 7V5a2 2 0 0 0-4 0v2H7a2 2 0 0 0-2 2v3h2a2 2 0 0 1 0 4H5v3a2 2 0 0 0 2 2h3v-2a2 2 0 0 1 4 0v2h3a2 2 0 0 0 2-2v-3h2a2 2 0 0 0 0-4h-2V9a2 2 0 0 0-2-2h-3Z"/></svg>
+              <span class="avatar"></span>
+            </div>
+          </div>
+          <div class="b-page">
+            <div class="skel">
+              <i style="width:46%;height:20px"></i>
+              <i style="width:80%;height:11px"></i>
+              <i style="width:72%;height:11px"></i>
+              <i style="width:38%;height:11px"></i>
+            </div>
+            <div class="dropdown">
+              <span class="x">✕</span>
+              <h3>Extensions</h3>
+              <small>These extensions don't need to see and change information on this site.</small>
+              <div class="drow">
+                <img src="icon128.png" alt="">
+                Scam Checker
+                <span class="pin">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1Z"/></svg>
+                </span>
+              </div>
+              <div class="drow manage">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+                Manage Extensions
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- прицелы экрана 1 -->
+        <div class="marker" style="top: 30px; right: 150px;">1</div>
+        <svg class="arrow" style="top: 60px; right: 76px; width: 64px; height: 34px;" viewBox="0 0 64 34">
+          <path d="M4 6 C 24 2, 44 8, 54 20"/>
+          <polygon class="head" points="60,28 46,24 54,14"/>
+        </svg>
+        <div class="target-ring" style="top: 89px; right: 34px; width: 40px; height: 40px;"></div>
+        <div class="marker" style="top: 300px; right: -18px;">2</div>
+        <svg class="arrow" style="top: 290px; right: 30px; width: 50px; height: 34px;" viewBox="0 0 56 36">
+          <path d="M50 32 C 38 34, 24 30, 14 18"/>
+          <polygon class="head" points="8,8 24,11 15,23"/>
+        </svg>
+        <div class="target-ring" style="top: 242px; right: 26px; width: 44px; height: 44px;"></div>
+      </section>
 
-      <div class="marker" style="top: 218px; right: 14px;">2</div>
-      <div class="target-ring" style="top: 204px; right: 132px; width: 46px; height: 46px;"></div>
-      <svg class="arrow" style="top: 214px; right: 62px; width: 62px; height: 40px;" viewBox="0 0 90 44">
-        <path d="M86 34 C 62 40, 30 34, 12 16"/>
-        <polygon class="head" points="6,8 22,10 14,22"/>
-      </svg>
+      <!-- Экран 2: запустить и получить вердикт -->
+      <section class="panel" aria-label="How to run a check">
+        <div class="step-chip"><i>2</i> Click the shield — get a verdict</div>
+        <div class="browser" aria-hidden="true">
+          <div class="b-tabs">
+            <div class="b-tab"><img src="icon128.png" alt=""> Scam Checker <span class="x">✕</span></div>
+            <div class="b-plus">+</div>
+          </div>
+          <div class="b-bar">
+            <div class="b-nav">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+            </div>
+            <div class="b-url">suspicious-shop.top/checkout</div>
+            <div class="b-ext">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 7V5a2 2 0 0 0-4 0v2H7a2 2 0 0 0-2 2v3h2a2 2 0 0 1 0 4H5v3a2 2 0 0 0 2 2h3v-2a2 2 0 0 1 4 0v2h3a2 2 0 0 0 2-2v-3h2a2 2 0 0 0 0-4h-2V9a2 2 0 0 0-2-2h-3Z"/></svg>
+              <span class="pinned"><img src="icon128.png" alt=""></span>
+              <span class="avatar"></span>
+            </div>
+          </div>
+          <div class="b-page">
+            <div class="skel">
+              <i style="width:52%;height:20px"></i>
+              <i style="width:78%;height:11px"></i>
+              <i style="width:64%;height:11px"></i>
+              <i style="width:150px;height:34px;background:#F3C2C2"></i>
+            </div>
+            <div class="popup">
+              <div class="p-head"><img src="icon128.png" alt=""><b>Scam Checker</b></div>
+              <div class="verdict">
+                <div class="ring">87</div>
+                <div>
+                  <b>Dangerous</b>
+                  <span>Do not enter passwords or payment details.</span>
+                </div>
+              </div>
+              <div class="vrow"><span>Domain age</span><code>4 days</code></div>
+              <div class="vrow"><span>Reputation</span><code>blocked</code></div>
+              <div class="vrow"><span>Connection</span><code>not secure</code></div>
+            </div>
+          </div>
+        </div>
+        <!-- прицел экрана 2: клик по закреплённой иконке -->
+        <div class="marker" style="top: 24px; right: -14px;">3</div>
+        <svg class="arrow" style="top: 50px; right: 22px; width: 44px; height: 38px;" viewBox="0 0 44 40">
+          <path d="M40 4 C 34 20, 26 28, 14 32"/>
+          <polygon class="head" points="4,34 18,26 20,38"/>
+        </svg>
+        <div class="target-ring" style="top: 86px; right: 36px; width: 40px; height: 40px;"></div>
+      </section>
     </div>
-
-    <!-- Шаг 3 подписью, как в референсе -->
-    <p class="caption"><mark>Open Scam Checker <span class="n">3</span> on any page — you'll get a clear verdict in seconds: Safe, Suspicious, or Dangerous.</mark></p>
 
     <a class="cta" href="https://www.google.com" target="_blank" rel="noopener">Open a website and try it now</a>
 
