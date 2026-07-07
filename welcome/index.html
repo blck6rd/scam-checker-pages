@@ -3,16 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scam Checker is installed — one quick step</title>
-  <meta name="description" content="Scam Checker is installed. Pin it to your toolbar and get a clear safety verdict on any website, link, or email.">
-  <meta name="robots" content="noindex">
+  <title>Is this link safe? Scam Checker gives a clear verdict in seconds</title>
+  <meta name="description" content="Scam Checker is installed. Any website, link, or email gets a clear verdict — Safe or Dangerous — with a risk score and the exact reasons why.">
+  <meta property="og:title" content="Scam Checker — a clear safety verdict in seconds">
+  <meta property="og:description" content="Check any website, link, or email. Risk score 0–100 and the exact reasons behind every verdict.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="icon128.png">
   <style>
-    /* Welcome Page — самодостаточная, бренд-токены из design-system/MASTER.md */
+    /* Welcome Page v2 — hero = вердикт-мокап (CSS, не растр), бренд-токены MASTER.md */
     :root {
       --brand: #2563EB; --brand-hover: #1D4ED8; --on-brand: #FFF;
       --background: #F6F8FB; --card: #FFF; --muted: #EDF1F7;
       --foreground: #101828; --muted-foreground: #5D6B82; --border: #DFE5EE;
       --safe: #15803D; --safe-bg: #F0FDF4; --safe-border: #BBF7D0;
+      --danger: #B91C1C; --danger-bg: #FEF2F2; --danger-border: #FECACA;
+      --ink: #0B1220; --ink-card: #131C2E; --ink-border: #24304A;
       --r: 14px;
     }
     @media (prefers-color-scheme: dark) {
@@ -21,127 +26,208 @@
         --background: #0B1220; --card: #131C2E; --muted: #1C2740;
         --foreground: #F2F5FA; --muted-foreground: #8B99B0; --border: #24304A;
         --safe: #34D399; --safe-bg: #0C271B; --safe-border: #14532D;
+        --danger: #F87171; --danger-bg: #2A1414; --danger-border: #7F1D1D;
       }
     }
     * { margin: 0; box-sizing: border-box; }
     body {
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       background: var(--background); color: var(--foreground);
-      min-height: 100vh; padding: 48px 20px 64px;
+      min-height: 100vh; padding: 44px 20px 64px;
       display: flex; flex-direction: column; align-items: center;
       font-size: 16px; line-height: 1.55;
     }
-    .wrap { width: 100%; max-width: 680px; }
+    .wrap { width: 100%; max-width: 960px; }
 
-    /* Указатель на тулбар (пазл справа сверху) */
+    /* Указатель на тулбар */
     .pointer {
-      position: fixed; top: 14px; right: 26px;
+      position: fixed; top: 14px; right: 26px; z-index: 10;
       display: flex; align-items: center; gap: 10px;
       font-weight: 600; color: var(--brand);
-      animation: nudge 1.6s ease-in-out infinite;
-      pointer-events: none;
+      animation: nudge 1.6s ease-in-out infinite; pointer-events: none;
     }
-    .pointer svg { width: 30px; height: 30px; transform: rotate(-45deg); }
+    .pointer svg { width: 30px; height: 30px; transform: rotate(45deg); }
     @keyframes nudge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    @media (prefers-reduced-motion: reduce) { .pointer { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .pointer, .scan-line { animation: none !important; } }
 
-    .hero { text-align: center; margin-bottom: 40px; }
-    .hero img { width: 88px; height: 88px; margin-bottom: 18px; }
+    /* ------------------------------------------------------------- HERO --- */
+    .hero {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: center; margin: 26px 0 54px;
+    }
+    @media (max-width: 820px) { .hero { grid-template-columns: 1fr; gap: 36px; } }
+
+    .brand-row { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+    .brand-row img { width: 46px; height: 46px; }
+    .brand-row b { font-size: 19px; letter-spacing: -.01em; }
     .badge {
-      display: inline-flex; align-items: center; gap: 8px;
+      display: inline-flex; align-items: center; gap: 7px;
       background: var(--safe-bg); color: var(--safe);
       border: 1px solid var(--safe-border); border-radius: 999px;
-      padding: 6px 14px; font-size: 14px; font-weight: 600; margin-bottom: 16px;
+      padding: 4px 12px; font-size: 13px; font-weight: 600; margin-left: 10px;
     }
-    h1 { font-size: 34px; line-height: 1.2; letter-spacing: -.02em; margin-bottom: 10px; text-wrap: balance; }
-    .sub { color: var(--muted-foreground); font-size: 18px; max-width: 480px; margin: 0 auto; }
+    h1 { font-size: 42px; line-height: 1.12; letter-spacing: -.02em; margin-bottom: 16px; text-wrap: balance; }
+    h1 em { font-style: normal; color: var(--brand); }
+    .sub { color: var(--muted-foreground); font-size: 19px; max-width: 430px; }
 
-    .steps { display: flex; flex-direction: column; gap: 14px; margin: 36px 0; }
+    /* Вердикт-мокап: суть продукта в одной карточке */
+    .mock { position: relative; }
+    .mock-card {
+      background: var(--ink-card);
+      border: 1px solid var(--ink-border);
+      border-radius: 18px; padding: 22px;
+      box-shadow: 0 24px 70px rgba(2, 8, 23, .45);
+      color: #F2F5FA;
+      max-width: 430px; margin: 0 auto;
+    }
+    .mock-url {
+      font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+      font-size: 13.5px; color: #B9C4D6;
+      background: #0B1220; border: 1px solid var(--ink-border);
+      border-radius: 9px; padding: 10px 13px;
+      overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+      margin-bottom: 16px;
+    }
+    .mock-verdict {
+      display: flex; align-items: center; gap: 16px;
+      background: #2A1414; border: 1px solid #7F1D1D;
+      border-radius: 13px; padding: 14px 16px; margin-bottom: 14px;
+    }
+    .ring {
+      --p: 87;
+      width: 64px; height: 64px; border-radius: 50%; flex: none;
+      background:
+        radial-gradient(closest-side, #2A1414 74%, transparent 75% 100%),
+        conic-gradient(#F87171 calc(var(--p) * 1%), #3a1d1d 0);
+      display: flex; align-items: center; justify-content: center;
+      font-family: ui-monospace, monospace; font-weight: 700; font-size: 19px; color: #FECACA;
+    }
+    .mock-verdict b { display: block; font-size: 20px; color: #F87171; letter-spacing: -.01em; }
+    .mock-verdict span { font-size: 13px; color: #E7B9B9; }
+    .mock-rows { display: flex; flex-direction: column; gap: 7px; }
+    .mock-row {
+      display: flex; justify-content: space-between; gap: 10px;
+      background: #0F1828; border: 1px solid var(--ink-border);
+      border-left: 3px solid #F87171;
+      border-radius: 8px; padding: 8px 12px; font-size: 13px;
+    }
+    .mock-row span { color: #8B99B0; }
+    .mock-row code { font-family: ui-monospace, monospace; color: #F2F5FA; }
+    /* Плавающий SAFE-чип для контраста */
+    .safe-chip {
+      position: absolute; top: -18px; right: 2px;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--safe-bg); color: var(--safe);
+      border: 1px solid var(--safe-border);
+      border-radius: 999px; padding: 8px 15px;
+      font-weight: 700; font-size: 14px;
+      box-shadow: 0 10px 26px rgba(2, 8, 23, .18);
+    }
+    .safe-chip code { font-family: ui-monospace, monospace; font-weight: 400; font-size: 12.5px; opacity: .85; }
+
+    /* ------------------------------------------------------------ шаги --- */
+    .steps-title { text-align: center; font-size: 22px; margin-bottom: 18px; letter-spacing: -.01em; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 34px; }
+    @media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
     .step {
-      display: flex; gap: 18px; align-items: flex-start;
       background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 22px 24px;
+      border-radius: var(--r); padding: 20px;
     }
     .num {
-      flex: none; width: 34px; height: 34px; border-radius: 50%;
+      width: 30px; height: 30px; border-radius: 50%;
       background: var(--brand); color: var(--on-brand);
       display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 16px;
+      font-weight: 700; font-size: 15px; margin-bottom: 12px;
     }
-    .step h2 { font-size: 18px; margin-bottom: 4px; }
-    .step p { color: var(--muted-foreground); font-size: 15px; }
+    .step h2 { font-size: 16.5px; margin-bottom: 4px; }
+    .step p { color: var(--muted-foreground); font-size: 14px; }
     .step .kbd {
-      display: inline-block; padding: 1px 7px; border-radius: 6px;
+      display: inline-block; padding: 0 6px; border-radius: 5px;
       background: var(--muted); border: 1px solid var(--border);
-      font-size: 13.5px; font-weight: 600; color: var(--foreground);
+      font-size: 12.5px; font-weight: 600; color: var(--foreground);
     }
-    .step svg.inline { width: 18px; height: 18px; vertical-align: -3px; }
+    .step svg { width: 17px; height: 17px; vertical-align: -3px; }
 
     .cta {
-      display: block; text-align: center;
+      display: block; text-align: center; max-width: 430px; margin: 0 auto;
       background: var(--brand); color: var(--on-brand);
       border-radius: 12px; padding: 15px 22px;
       font-size: 17px; font-weight: 600; text-decoration: none;
       transition: background .15s ease-out;
     }
     .cta:hover { background: var(--brand-hover); }
-    .footer {
-      margin-top: 34px; text-align: center;
-      color: var(--muted-foreground); font-size: 13.5px;
-    }
+    .footer { margin-top: 30px; text-align: center; color: var(--muted-foreground); font-size: 13.5px; }
   </style>
 </head>
 <body>
-  <!-- Живой указатель на область пазла в тулбаре -->
   <div class="pointer" aria-hidden="true">
-    <span>Find it up here</span>
+    <span>Pin it up here</span>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>
-    </svg>
+         stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
   </div>
 
   <div class="wrap">
-    <header class="hero">
-      <img src="icon128.png" alt="Scam Checker logo">
-      <div><span class="badge">✓ Installed successfully</span></div>
-      <h1>Scam Checker is ready. One quick step.</h1>
-      <p class="sub">Pin it to your toolbar so a safety verdict is always one click away.</p>
-    </header>
+    <!-- HERO: суть за 2 секунды -->
+    <section class="hero">
+      <div>
+        <div class="brand-row">
+          <img src="icon128.png" alt="Scam Checker logo">
+          <b>Scam Checker</b>
+          <span class="badge">✓ Installed</span>
+        </div>
+        <h1>Know it's a scam — <em>before</em> you click.</h1>
+        <p class="sub">Any website, link, or email gets a clear verdict with a 0–100 risk score and the exact reasons why. No guessing.</p>
+      </div>
 
+      <!-- Вердикт-мокап -->
+      <div class="mock" aria-hidden="true">
+        <div class="safe-chip">✓ Safe <code>wikipedia.org</code></div>
+        <div class="mock-card">
+          <div class="mock-url">http://paypal-verify.login-secure.top/account</div>
+          <div class="mock-verdict">
+            <div class="ring">87</div>
+            <div>
+              <b>Dangerous</b>
+              <span>Do not enter passwords or payment details.</span>
+            </div>
+          </div>
+          <div class="mock-rows">
+            <div class="mock-row"><span>Domain age</span><code>4 days</code></div>
+            <div class="mock-row"><span>Impersonation</span><code>"paypal" in the domain</code></div>
+            <div class="mock-row"><span>Connection</span><code>not secure</code></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Шаги закрепления -->
+    <h2 class="steps-title">Keep it one click away — 10 seconds</h2>
     <div class="steps">
       <div class="step">
         <div class="num">1</div>
-        <div>
-          <h2>Open the extensions menu</h2>
-          <p>Click the puzzle icon
-            <svg class="inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 7V5a2 2 0 0 0-4 0v2H7a2 2 0 0 0-2 2v3h2a2 2 0 0 1 0 4H5v3a2 2 0 0 0 2 2h3v-2a2 2 0 0 1 4 0v2h3a2 2 0 0 0 2-2v-3h2a2 2 0 0 0 0-4h-2V9a2 2 0 0 0-2-2h-3Z"/></svg>
-            in the top-right corner of your browser.</p>
-        </div>
+        <h2>Open the extensions menu</h2>
+        <p>Click the puzzle icon
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 7V5a2 2 0 0 0-4 0v2H7a2 2 0 0 0-2 2v3h2a2 2 0 0 1 0 4H5v3a2 2 0 0 0 2 2h3v-2a2 2 0 0 1 4 0v2h3a2 2 0 0 0 2-2v-3h2a2 2 0 0 0 0-4h-2V9a2 2 0 0 0-2-2h-3Z"/></svg>
+          in the top-right corner.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
-        <div>
-          <h2>Pin Scam Checker</h2>
-          <p>Find <span class="kbd">Scam Checker</span> in the list and click the pin
-            <svg class="inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1Z"/></svg>
-            next to it. The shield will stay on your toolbar.</p>
-        </div>
+        <h2>Pin Scam Checker</h2>
+        <p>Click the pin
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1Z"/></svg>
+          next to <span class="kbd">Scam Checker</span>.</p>
       </div>
       <div class="step">
         <div class="num">3</div>
-        <div>
-          <h2>Check any page in one click</h2>
-          <p>Click the shield to scan the site you are on — or paste any link or email text to get a clear verdict: safe, suspicious, or dangerous.</p>
-        </div>
+        <h2>Check anything</h2>
+        <p>Click the shield on any page — or paste a link or email text for an instant verdict.</p>
       </div>
     </div>
 
     <a class="cta" href="https://www.google.com" target="_blank" rel="noopener">Open a website and try it now</a>
 
-    <p class="footer">Scam Checker never collects your browsing history.<br>
-      Analysis runs only when you ask for a check.</p>
+    <p class="footer">Scam Checker never collects your browsing history.<br>Analysis runs only when you ask for a check.</p>
   </div>
-  <!-- analytics placeholder: страница открывается один раз после установки -->
+  <!-- analytics placeholder -->
 </body>
 </html>
